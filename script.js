@@ -32,9 +32,20 @@
 
   qEl.addEventListener("input", render);
 
+  function monthStart() {
+    const d = new Date();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    return d.getFullYear() + "-" + m + "-01";
+  }
+  function fiscalStart() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const fy = d.getMonth() + 1 >= 4 ? y : y - 1;
+    return fy + "-04-01";
+  }
   function inRange(game) {
-    if (range === "month") return game.created >= "2026-09-01";
-    if (range === "year") return game.created >= "2026-04-01";
+    if (range === "month") return game.created >= monthStart();
+    if (range === "year") return game.created >= fiscalStart();
     return true;
   }
 
