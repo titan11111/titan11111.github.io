@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0c0a08">
+  <meta name="description" content="タイタンがGitHubに公開したブラウザゲームの入口。ここから各ゲームへ進めます。">
+  <meta property="og:title" content="Titans Game Works">
+  <meta property="og:description" content="公開したブラウザゲームの入口です。">
+  <meta property="og:url" content="https://titan11111.github.io/">
+  <meta property="og:type" content="website">
+  <title>Titans Game Works</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <p class="kicker">Titans Game Works</p>
+    <h1>公開したゲーム</h1>
+    <p class="lead">ここが入口です。遊ぶボタンで、それぞれのゲームへ進みます。</p>
+    <label class="search">
+      <span class="sr">検索</span>
+      <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="タイトルで探す" aria-label="タイトルで探す">
+    </label>
+    <div class="filters" role="tablist" aria-label="絞り込み">
+      <button type="button" class="chip is-on" data-range="month">今月</button>
+      <button type="button" class="chip" data-range="year">今年度</button>
+      <button type="button" class="chip" data-range="all">すべて</button>
+    </div>
+    <p class="count" id="count"></p>
+  </header>
+  <main id="list" data-scrollable></main>
+  <script src="games.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
