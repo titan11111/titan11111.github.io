@@ -1547,7 +1547,7 @@ function showOv(id){
   if(id){menuEl=$({ovTitle:'mTitle',ovHelp:'mHelp',ovPause:'mPause',ovOver:'mOver',ovClear:'mClear'}[id]);sel=0;selUpdate()}
   else menuEl=null;
 }
-function btns(){return menuEl?Array.from(menuEl.querySelectorAll('button')):[]}
+function btns(){return menuEl?Array.from(menuEl.querySelectorAll('button')).filter(b=>!b.hidden):[]}
 function selUpdate(){btns().forEach((b,i)=>b.classList.toggle('sel',i===sel))}
 function act(a){
   auInit();
