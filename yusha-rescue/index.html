@@ -256,6 +256,11 @@ body.game-over-page{height:var(--mobile-height,100dvh);min-height:0;overflow:hid
 @media(max-width:600px){#ctl{--u:.78px;min-height:0;padding:6px 10px}#stick{width:calc(138 * var(--u));height:calc(138 * var(--u))}}
 @media(max-height:500px) and (orientation:landscape){#app.over-mode #ovOver{gap:9px;padding:12px}#app.over-mode .go{font-size:40px}#app.over-mode #mOver{gap:8px;max-height:70%;width:340px}#app.over-mode #mOver .big{font-size:17px;margin-bottom:8px}#app.over-mode #mOver>button{min-height:40px;padding:8px}#ctl{--u:.53px}#stick{width:78px;height:78px}}
 
+body.title-page{height:var(--mobile-height,100dvh);min-height:0;overflow:hidden;box-sizing:border-box}
+#app.title-mode{height:100%!important;display:flex!important;gap:0!important}
+#app.title-mode #hud,#app.title-mode #messageRow,#app.title-mode #ctl,#app.title-mode #gpStatus,#app.title-mode #keys{display:none!important}
+#app.title-mode #wrap{width:100%!important;height:100%!important;flex:1;min-width:0!important;min-height:0;display:flex;align-items:center;justify-content:center}
+#app.title-mode #screen{width:var(--field-w,min(100%,calc((100dvh - 24px)*.8333)));height:auto!important;aspect-ratio:5/6;max-width:100%}
 </style>
 </head>
 <body>
@@ -752,7 +757,7 @@ function checkpoint(){
 function validateProgress(d){
  if(!d||d.format!=='yusha-rescue-save'||d.version!==1||!['normal','trial'].includes(d.mode))throw Error('このゲームのセーブではありません');
  for(const k of ['rescued','taken','lost','kills'])if(!Number.isSafeInteger(d[k])||d[k]<0)throw Error('人数データが不正です');
- if(!Number.isFinite(d.elapsed)||d.elapsed<0||!Number.isInteger(d.hp)||d.hp<1||d.hp>HP0||typeof d.clearSeen!=='boolean'||typeof d.endless!=='boolean'||!Array.isArray(d.following))throw Error('セーブ内容が不正です');
+ if(!Number.isFinite(d.elapsed)||d.elapsed<0||d.elapsed>Number.MAX_SAFE_INTEGER||!Number.isInteger(d.hp)||d.hp<1||d.hp>HP0||typeof d.clearSeen!=='boolean'||typeof d.endless!=='boolean'||!Array.isArray(d.following))throw Error('セーブ内容が不正です');
  for(const k of d.following)if(!k||!Number.isInteger(k.v)||k.v<0||k.v>3||!Number.isInteger(k.hp)||k.hp<1||k.hp>KT[k.v].hp)throw Error('同行者データが不正です');
  return d;
 }
@@ -1498,7 +1503,7 @@ function drawOverFx(){
   for(let i=0;i<3;i++){const an=clock*4+i*2.09,sx=h.x*T+T/2+Math.cos(an)*24,sy=h.y*T+T/2-30+Math.sin(an)*7;ctx.fillStyle='#ffe14a';ctx.fillRect(sx-4,sy-4,8,8);ctx.fillStyle='#fff';ctx.fillRect(sx-2,sy-2,4,4)}
 }
 function render(){
-  $('app').classList.toggle('over-mode',state==='over');document.body.classList.toggle('game-over-page',state==='over');
+  $('app').classList.toggle('title-mode',state==='title');document.body.classList.toggle('title-page',state==='title');$('app').classList.toggle('over-mode',state==='over');document.body.classList.toggle('game-over-page',state==='over');
   if(state==='title'||!S){titleArt.hidden=false;const gameCtx=ctx;ctx=titleCtx;ctx.save();ctx.setTransform(3,0,0,3,0,0);drawTitleScene();ctx.restore();ctx=gameCtx;return}
   titleArt.hidden=true;
   ctx.save();
