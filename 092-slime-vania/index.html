@@ -1574,7 +1574,7 @@ function moveBody(b,noPlat){
       if(b.x+b.w>p.x+1&&b.x<p.x+p.w-1&&b.y+b.h>=p.y&&pb<=p.y+4+Math.max(0,p.dy||0)){b.y=p.y-b.h;b.vy=0;b.onG=true;b.ride=p;break;}}
   }else{const ty=Math.floor(b.y/T);for(let tx=x0;tx<=x1;tx++)if(solidAt(tx,ty,b)||tileAt(tx,ty)===9){b.y=(ty+1)*T;b.vy=0;b.hitU=true;break;}}
 }
-const FLOATMAX=150;
+const FLOATMAX=180;
 function stepBody(b,inp,isC){
   const wet=inWater(b.x+b.w/2,b.y+b.h*.6),SP=(isC?1.2:1.5)*(wet?.7:1)*(b.floating?1.15:1),JV=isC?4.7:5.4;
   const mx=(inp.r?1:0)-(inp.l?1:0);
@@ -1590,7 +1590,7 @@ function stepBody(b,inp,isC){
     b.vy=Math.min(b.vy+((inp.a&&Math.abs(b.vy)<.9&&!b.onG)?.17:.26),6);
     // ふわり: X in the air spreads the body like a parasol (limited gauge, refills on the ground)
     b.floating=false;
-    if(b===pl&&inp.x&&!b.onG&&G.floatG>0&&b.vy>-.5){b.floating=true;G.floatG--;if(b.vy>.55)b.vy=Math.max(.55,b.vy*.82);if(!b.flS){b.flS=1;sfx('float');AUD.voice('sv_float',{gap:4});}
+    if(b===pl&&inp.x&&!b.onG&&G.floatG>0&&b.vy>-.5){b.floating=true;G.floatG--;if(b.vy>.46)b.vy=Math.max(.46,b.vy*.79);if(!b.flS){b.flS=1;sfx('float');AUD.voice('sv_float',{gap:4});}
       if((G.t&3)===0)spark(b.x+b.w/2+rnd(-8,8),b.y+rnd(0,6),'#a6ecff',0,.3,18);}
     else b.flS=0;
   }
