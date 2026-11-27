@@ -970,7 +970,7 @@ const S1_SECTIONS=[
 ];
 const S1_SIGNS=[   // tutorial plaques (tile x, text)
   [4,'↓ながおしで しみこむ\n鉄格子を すりぬけよう'],[30,'B ぱくっ：小さな魔物や\nアイテムを すいこむ'],[47,'像に ふれると チェックポイント'],
-  [57,'X ながおしで ふわり\n空中で ゆっくり おちる'],[79,'弱った騎士に B で のっとり\nB で ひびわれた床を こわせ'],
+  [50,'上の足場から X ながおしで ふわり\nトゲの上を ゆっくり こえよう（PCはC）'],[79,'弱った騎士に B で のっとり\nB で ひびわれた床を こわせ'],
   [104,'Y で ぶんれつ\n2つの床スイッチを おせ'],[131,'しみこんで 装置の中へ\n↓ながおし'],[180,'この先 ボス。準備はいい？'],[211,'鍛錬の間：手に入れた力を ためそう\nわら人形は なんどでも 立ち上がる']];
 
 /* ---- stage2.js ---- */
@@ -1190,7 +1190,8 @@ function drawHarp(f,tx,ty){const X=tx*T,Y=ty*T,l=tileAt(tx-1,ty)!==11,r=tileAt(t
   f(X,Y+6,T,3,'#6b4430');f(X,Y+6,T,1,'#c9a35a');for(let i=0;i<T;i+=4)f(X+i+1,Y+2,1,4,'#e6dcc0');f(X,Y+1,T,1,'#c9a35a');
   if(l){f(X,Y-6,4,15,'#4a2e20');f(X+1,Y-8,2,3,'#c9a35a');}if(r){f(X+12,Y-6,4,15,'#4a2e20');f(X+13,Y-8,2,3,'#c9a35a');}}
 function drawSpikes(f,tx,ty){const X=tx*T,Y=ty*T;f(X,Y+13,T,3,'#2c3044');
-  for(let i=0;i<4;i++){const x=X+i*4;f(x+1,Y+6,2,7,'#7d84a0');f(x+1,Y+4,2,2,'#b8c0d8');f(x+2,Y+3,1,1,'#e8eeff');f(x,Y+10,1,3,'#3a3f55');f(x+3,Y+9,1,4,'#3a3f55');}
+  // sharp iron spikes with blood-red tips, so they read as danger (not a fence)
+  for(let i=0;i<4;i++){const x=X+i*4;f(x,Y+10,4,3,'#3a3f55');f(x+1,Y+7,2,3,'#6a7090');f(x+1,Y+5,2,2,'#8a3038');f(x+1,Y+3,1,2,'#c8303a');f(x+2,Y+4,1,1,'#ff6a6a');f(x+1,Y+2,1,1,'#ff9a8a');f(x,Y+11,1,2,'#2a2e40');}
   if(hash(tx,ty)>.6)f(X+5,Y+8,2,2,'#6a2a30');}
 function drawGrate(f,tx,ty){const X=tx*T,Y=ty*T;f(X,Y,T,T,'#14151f');
   f(X,Y,T,2,'#5d6380');f(X,Y,T,1,'#8a90ab');for(let i=0;i<4;i++)f(X+1+i*4,Y+2,2,5,'#4a5068');f(X,Y+6,T,1,'#2c3044');
@@ -1583,10 +1584,10 @@ function stepBody(b,inp,isC){
   if(b.ride&&b.ride.dx)b.x+=b.ride.dx;
   b.coy=b.onG?8:b.coy-1;b.jb=inp.aHit?9:b.jb-1;
   if(wet){if(inp.aHit){b.vy=-2.7;b.sqx=.8;b.sqy=1.25;sfx('puni');bubbles(b.x+b.w/2,b.y+b.h,4);}
-    b.vy=Math.min(b.vy+.09,1.3);if(!inWater(b.x+b.w/2,b.y-2)&&inp.aHit)b.vy=-4.6;}
+    b.vy=Math.min(b.vy+.09,1.3);const nearTop=!inWater(b.x+b.w/2,b.y-8);if(nearTop&&(inp.aHit||(inp.a&&b.vy<0&&!b.wjU))){b.vy=-5.8;b.wj=16;b.wjU=1;b.sqx=.72;b.sqy=1.34;sfx('jump');bubbles(b.x+b.w/2,b.y+b.h,6);}if(!inp.a)b.wjU=0;}
   else{
     if(b.jb>0&&b.coy>0){b.vy=-JV;b.jb=0;b.coy=0;b.sqx=.74;b.sqy=1.32;b.pull=1;b.thr={x:b.x+b.w/2,y:b.y+b.h,t:8};puff(b.x+b.w/2,b.y+b.h,3,'#ffffff');if(!isC){sfx('jump');if(Math.random()<.35)AUD.voice('sv_jump',{gap:2.5});}}
-    if(!inp.a&&b.vy<-2.3)b.vy=-2.3;
+    if(b.wj>0)b.wj--;else if(!inp.a&&b.vy<-2.3)b.vy=-2.3;
     b.vy=Math.min(b.vy+((inp.a&&Math.abs(b.vy)<.9&&!b.onG)?.17:.26),6);
     // ふわり: X in the air spreads the body like a parasol (limited gauge, refills on the ground)
     b.floating=false;
